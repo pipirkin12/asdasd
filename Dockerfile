@@ -1,14 +1,16 @@
-# Используем официальный Python runtime
 FROM python:3.12-slim
 
-# Создаём рабочую директорию
 WORKDIR /app
 
+# Устанавливаем системные пакеты (опционально)
+RUN apt-get update && apt-get install -y \
+    build-essential \
+    && rm -rf /var/lib/apt/lists/*
+
 # Копируем файлы
+COPY requirements.txt .
+RUN pip install --no-cache-dir -r requirements.txt
+
 COPY . .
 
-# Устанавливаем зависимости
-RUN pip install --no-cache-dir aiogram sqlite3
-
-# Команда запуска
 CMD ["python", "tveak.py"]
